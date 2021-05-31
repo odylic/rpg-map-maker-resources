@@ -1,13 +1,28 @@
 import React from 'react'
-
+import Dropdown from 'react-dropdown'
+import "react-dropdown/style.css"
+  
+  
 export default function TilePalette({
   tileset,
+  setTileset, 
   position,
-  size,
   activeTile,
-  setActiveTile
+  setActiveTile,
+  setBgTile, 
 }) {
-  const { width, height } = size;
+  const tilesetData = require('../../data/tilesets.json')
+  const tilesets = Object.keys(tilesetData).map(set => ({
+    type: "group",
+    // get rid of hyphens
+    name: set.replace(/-/g, " "),
+    items: tilesetData[set].variants.map(variant => ({
+      value: `${set}/${variant}`,
+      label: variant, 
+    }))
+  }))
+  const [tilesetGroup, tilesetVariant] = tileset.split("/")
+  const { width, height } = tilesetData[tilesetGroup].size;
   const tiles = []
   let id = 0
 
@@ -36,14 +51,37 @@ export default function TilePalette({
         zIndex: 100,
         backgroundColor: 'white',
       }}>
-      <img id="handle" src="/img/drag-handle.png" alt='' />
-      <div
-         style={{
+      <div style={{display: "flex", margin: 4 }}>
+        <img id="handle" src="/img/drag-handle.png" alt='' />
+        <div style={{position: "relative", width: 32, marginLeft: 8}}>
+          <div
+            style={{
               background: `url(/sprites/${tileset}.png) -${activeTile.x}px -${activeTile.y}px no-repeat`,
               width: 32,
               height: 32,
             }}
-      />
+            />
+        </div>
+
+        <div style={{width:200, marginLeft: 8}}>
+          <Dropdown
+            options={tilesets}
+            onChange={tileset => setTileset(tileset.value)}
+            value={tileset}
+          />
+        </div>
+
+        
+        <div style={{ width: 200, marginLeft: 8 }}>
+          <button
+            onClick={() => setBgTile(activeTile)}
+            style={{
+              padding: "6px 20px",
+              fontSize: '14px'
+            }}
+          >Fill BG</button>
+        </div>
+      </div>
       {tiles.map((row, y) => (
         <div style={{ display: "flex" }}>
           {row.map((tile, x) =>

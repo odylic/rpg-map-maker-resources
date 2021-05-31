@@ -9,6 +9,7 @@ export default function App() {
   const [tileset, setTileset] = useState('rpg-nature-tileset/spring');
   const [activeTile, setActiveTile] = useState({x:1*32, y:4*32})
   const [tiles, setTiles] = useState([]);
+  const [bgTile, setBgTile] =useState({x: -32, y: -32})
   const [mapSize, setMapSize] = useState({
     width: 800,
     height: 600, 
@@ -49,19 +50,20 @@ export default function App() {
       <TilePalette
         position={position}
         tileset={tileset}
+        setTileset={setTileset}
         activeTile={activeTile}
         setActiveTile={setActiveTile}
-        size={{
-          height: 288,
-          width: 640,
-        }}
+        setBgTile={setBgTile}
       />
       <Map
         tiles={tiles}
         tileset={tileset}
         size={mapSize}
         activeTile={activeTile}
-        setTiles={setTiles} />
+        setTiles={setTiles}
+        bgTile={bgTile}
+      />
+      
     </div>
   )
 }

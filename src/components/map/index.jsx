@@ -1,6 +1,13 @@
 import React from 'react'
 
-export default function Map({ tiles, setTiles, tileset, activeTile, size }) {
+export default function Map({
+  tiles,
+  setTiles,
+  tileset,
+  activeTile,
+  size,
+  bgTile, 
+}) {
   // clones matrix, m is the matrix
   function cloneMatrix(m) {
     const clone = new Array(m.length)
@@ -30,8 +37,31 @@ export default function Map({ tiles, setTiles, tileset, activeTile, size }) {
         width: size.width, 
       }}>
       
-      {
-        tiles.map((row, y) => <div style={{display: 'flex'}}>
+      <div style={{position: "absolute", zIndex: 1}}>
+        {tiles.map((row, y) =>
+        <div style={{ display: 'flex' }}>
+          {
+            row.map((tile, x) => (
+              <div
+                onClick={()=> dropTile({x,y})}
+                style={{
+                  borderTop: "1px solid black",
+                  borderRight: '1px solid black',
+                  background: `url(/sprites/${tileset}.png) -${bgTile.x}px -${bgTile.y}px no-repeat`,
+                  width: 32,
+                  height: 32,
+                }}
+              />)
+            )
+          }
+        </div> )
+      }
+      </div>
+
+
+      <div style={{position: "absolute", zIndex: 2}}>
+        {tiles.map((row, y) =>
+        <div style={{ display: 'flex' }}>
           {
             row.map((tile, x) => (
               <div
@@ -46,10 +76,10 @@ export default function Map({ tiles, setTiles, tileset, activeTile, size }) {
               />)
             )
           }
-
         </div> )
       }
-      
+      </div>
+
     </div>
   )
 }
